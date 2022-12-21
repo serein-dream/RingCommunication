@@ -7,7 +7,7 @@
  
 ### where is the core code of communication
  
-    It is 33-57 lines in the "train_model()" function in "run.py" file under "utiles" folder, between "loss.backward()" and "optimizer.step()". 
+    It is 33-57 lines in the 'train_model()' function in 'run.py' file under 'utiles' folder, between 'loss.backward()' and 'optimizer.step()'. 
     There are detailed comments to explain my ideas.
  
 ### Installing
@@ -22,10 +22,11 @@
 
 ### Code structure explanation
  
-    "Train.py"  is the main entrance of the program.    At the bottom, "if __name__=="__ main__ ":" start multi-threaded task. Then, in "init_process()",  carry out initialization configuration, load data and models,and make each worker enter training through "utils. run()" in 106 lines
-    "run.py"    in the "utils" folder is used to train and test the model, and the communication code is written in the "train_model()" function.
-    "data" folder stores the dataset
-    "Usage.py"   is not used temporarily
+    *"Train.py"  is the main entrance of the program.    
+    >> At the bottom, "if __name__=="__ main__ ":" start multi-threaded task. Then, in "init_process()",  carry out initialization configuration, load data and models,and make each worker enter training through "utils. run()" in 106 lines
+    *"run.py"    in the "utils" folder is used to train and test the model, and the communication code is written in the "train_model()" function.
+    *"data" folder stores the dataset
+    *"Usage.py"   is not used temporarily
  
 ### Communication ideas
     Begin from rank 0，rank 0 send its grad to rank 1(its right worker).
