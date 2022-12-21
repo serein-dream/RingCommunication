@@ -1,12 +1,14 @@
 ## Introduction
  
     Hello! 
-    This is the example code I wrote to implement ring communication using send and recv in torch.distributed. Here is a brief description.
+    This is the example code I wrote to implement ring communication using send and recv in torch.distributed. 
+    Here is a brief description.
     model is cnn, dataset is mnist(needn't download by yourself)
  
 ### where is the core code of communication
  
-    It is 33-57 lines in the train_model() function in utiles.run, between loss. backward () and optimizer. step (). There are detailed comments to explain my ideas.
+    It is 33-57 lines in the "train_model()" function in "run.py" under "utiles" folder, between "loss.backward()" and "optimizer.step()". 
+    There are detailed comments to explain my ideas.
  
 ### Installing
  
@@ -15,7 +17,8 @@
 ## Running
  
     All you need to do is enter "sh execute_cpu.sh" on the command line
-    If you want to change the number of workers for parallel training, you can change the value of "world_size" in "execute_cpu. sh", which represents the number of workers
+    If you want to change the number of workers for parallel training, 
+    you can change the value of "world_size" in "execute_cpu. sh", which represents the number of workers
 
 ### Code structure explanation
  
