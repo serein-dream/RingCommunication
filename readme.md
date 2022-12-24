@@ -14,9 +14,11 @@
  
 ## Running
  
-    All you need to do is：1.enter the "./ring reduce" directory   2. enter "sh execute_cpu.sh" on the command line
-    If you want to change the number of workers for parallel training, 
-    you can change the value of "world_size" in "execute_cpu. sh", which represents the number of workers
+    All you need to do is：
+    1.enter the "./ring reduce" directory   
+    2. enter "sh execute_cpu.sh" on the command line
+    If you want to change the number of workers for parallel training, you can change the value of "world_size" in "execute_cpu. sh", which represents the number of workers
+    When the training reaches about 90 epochs, the accuracy of the test_set will reach more than 90%
 
 ## Code structure explanation
  
