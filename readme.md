@@ -35,15 +35,19 @@ Just download this folder directly
  
 ## Communication ideas
 We need two ring communications：
+  
+The first ring:
 1. Begin from rank 0，rank 0 send its grad to rank 1(its right worker).
 2. Others：
    1. firstly, recive its right worker; 
    2. secondely, add its grad and updata itself; 
    3. thirdly, send the new grad to its right worker
 3. After all workers done ,the last rank（rank size-1） aggregate all worker's grad ,and send its grad to rank 0
-   
+  
+The second ring:
+  
 1. Now, begin from rank 0, spread the aggregated grad ring one-to-one
-2. he grad of rank size-1 is the grad that aggregates all the rank, so rank size-2 does not need to be sent to rank size-1 again
+2. Because the grad of rank size-1 is the grad that aggregates all the rank, so rank size-2 does not need to send its grad to rank size-1,just stop at rank size-2
 3. Finally, divide grad by "world_size" to get the average gradient and complete communication
  
 ## Authors
