@@ -5,7 +5,7 @@ This is the example code I wrote to implement ring communication using ***send**
   
 Here is a brief description.
   
-model is cnn, dataset is mnist(`needn't download by yourself`)
+model is cnn, dataset is mnist(`needn't download by yourself`It will download automatically when you run the code，its code located in ***52-57 lines*** in ***train.py***)
  
 ## where is the core code of communication
 It is ***33-57 lines*** in the ***train_model()*** function in ***run.py*** file under ***utiles*** folder, between 'loss.backward()' and 'optimizer.step()'.   
