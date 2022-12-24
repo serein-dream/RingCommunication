@@ -1,7 +1,7 @@
 ## Introduction 
 Hello! 
   
-This is the example code I wrote to implement ring communication using send and recv in torch.distributed. 
+This is the example code I wrote to implement ring communication using ***send*** and ***recv*** in ***torch.distributed***. 
   
 Here is a brief description.
   
