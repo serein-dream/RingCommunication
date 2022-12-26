@@ -52,8 +52,9 @@ The second ring:
  
 ## Authors
  
-* **Xvyang Ma** - *Initial work* - [Homepage](https://github.com/serein-dream)
-    .
+* **Xvyang Ma** - [Homepage](https://github.com/serein-dream)
+* ***Mixed-Compression***  -[Main Reference](https://github.com/ZhangQBx/Mixed-Compression/tree/zhangqinbo)  -[**Qingbo Zhang**](https://github.com/ZhangQBx)
+* 
     .
     .
     (waiting for you to add :P)
