@@ -18,7 +18,6 @@ def get_args():
     parser.add_argument('--data_dir', type=str, default="./data/", help='Dataset path.')
     parser.add_argument('--dataset', type=str, default="mnist", help='Dataset type.')
     parser.add_argument('--device', type=str, default="cpu", help='Dataset type.')
-    parser.add_argument('--world_size', type=int, default=4, help="World size.")
     parser.add_argument('--model', type=str, default="cnn", help="Choose your model.")
     #parser.add_argument("--hidden_layers", nargs='+', type=int, default=[64, 32, 16])
     #parser.add_argument("--dropouts", nargs='+', type=float, default=[0.5, 0.5])
@@ -29,7 +28,17 @@ def get_args():
     parser.add_argument('--lr_step', type=int, default=[40, 80], nargs="+", help='Training learning rate steps.')
     parser.add_argument('--epoch', type=int, default=200, help='Training epochs.')
     parser.add_argument('--backend', type=str, default="gloo", help='Communication backend.')
-
+    parser.add_argument(
+        '-i',
+        '--init-method',
+        type=str,
+        default='tcp://127.0.0.1:23456',
+        help='URL specifying how to initialize the package.')
+    parser.add_argument('-s', '--world-size', type=int, default=7, help='Number of processes participating in the job.')
+    parser.add_argument('--nnodes', type=int, default=0, help='the number of nodes.')
+    parser.add_argument('--node_rank', type=int, default=0, help='the rank ofshuobei nodes.')
+    parser.add_argument('--nproc_per_node', type=int, default=0, help='the number of porcess on one node.')
+    parser.add_argument("--local_rank", type=int)
     time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     args = parser.parse_args()
 
@@ -38,10 +47,10 @@ def get_args():
 
 def init_process(rank, args):
     #Parameter configuration and initialization
-    os.environ['MASTER_ADDR'] = "localhost"
-    os.environ["MASTER_PORT"] = "5555"  
+    os.environ['MASTER_ADDR'] = "127.0.0.1"
+    os.environ["MASTER_PORT"] = "23456"  
     #print("rank ",rank,"starts\n")
-    dist.init_process_group(args.backend, rank=rank, world_size=args.world_size)
+    dist.init_process_group(backend=args.backend, init_method=args.init_method, world_size=args.world_size, rank=args.rank)
     device = torch.device("cpu")
     if args.device != "cpu":
         device = torch.device("cuda", dist.get_rank())
@@ -85,12 +94,10 @@ def init_process(rank, args):
 #Program entry is here
 if __name__ == "__main__":
     args, time = get_args()
-    process = []
-    mp.set_start_method("spawn")
-    for rank in range(args.world_size):
-        p = mp.Process(target=init_process, args=(rank, args))
-        p.start()
-        process.append(p)
-
-    for p in process:
-        p.join()
+    init_process(args.rank,args)
+    '''多机多卡
+    for local_rank in range(0,args.nproc_per_node):
+        args.local_rank=local_rank
+        args.rank=args.node_rank * args.nproc_per_node + local_rank
+        init_process(args.rank,args)
+    '''
