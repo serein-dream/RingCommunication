@@ -14,35 +14,60 @@ There are detailed comments to explain my ideas.
  
 ## Installing
  
-Just download this folder directly
+Just download this folder in all servers directly.
  
 ## Env
-* Firstly, you should have installed **anconda**
-* Secondly ,you should install the some packages. We import them in ***train.py*** and ***run.py***.When you debug, it will remind you which versions need to be installed or changed
-* Thirdly, you need to have several servers that can communicate with each other, and corresponding aliases in their hosts. 
-    * For example, in execute.sh, ***machines={01 02}***, ***$cluster_ name=ring***, then alias the two servers as ***ring01*** and ***ring02***:
-    * 192.168.0.1 server1 ring01
-    * 192.168.0.2 server2 ring02
-    * If **RuntimeError: The server socket has failed to listen on any local network address** occurs, you can try to close the port firewall.
-    * For example, in execute.sh, if you set "$master_ip" to 192.168.0.1:2345, you need to ensure that port 2345 is open. If an error is still reported, try to close the firewall on port 2345
-* Set the three folder paths as follows：
-    * home_path="/home/maxvyang"    the root
-    * atcivate_path="${home_path}/anaconda3/bin/activate"   when you install conda,you will find the **/anaconda3**
-    * env_path="${home_path}/anaconda3/envs/fl38"           **fl38** is my conda env name,you can create your conda env with any name 
-    * code_path="${home_path}/fl/ring-reduce"             **/ring-reduce**is the **/RingCommunication** on my github
-* Finally，Set these three directories as shared folders(atcivate_path, env_path, code_path). 
-    * If you don't know how to do it, you can refer to: -[Here] (https://blog.csdn.net/qq_41853833/article/details/126479493)  
+* You should have installed **anconda** in all servers.
+    * **I have pack conda env for you.** 
+    
+      In all your servers, you can download the **"environment.yaml"**  and run ***"conda env create -f environment.yaml"***, then you will get the env "fl38".
+      
+      you can activate this env by ***"conda activate fl38"***
+      
+* You need to have several servers that can communicate with each other, and corresponding aliases in their hosts. 
+    * For example, they should contain each other in their ***/etc/hosts*** :
+    
+         192.168.0.1 server1
+      
+         192.168.0.2 server2
+
+* Find your **gloo_socket_ifname**：
+    * run ***"ifconfig"*** on the command line. 
+    * If server1'ip is 192.168.0.1, then the name whose ip is 192.168.0.1 is to find gloo_ socket_ name. 
+    * It will be used when we run train.py. (different server may have different)
+ 
 ## Running
  
 * When you complete the above environment configuration, you need to do is：
-    * 1.enter the "./ring-reduce" directory, the directory where "extract. sh" is located   
-    * 2. enter "bash excute.sh ${world_size} $cluster-name $master_ip" on the command line,for example:
-    * bash excute.sh 2 ring 192.168.0.1:2345   
-    * **2** means two servers(world_size) 
-    * **ring** is cluster_name,Corresponding to the alias in **/ect/hosts**  
-    * **192.168.0.1** is the ip address of the server1(where the code located in) in **/ect/hosts**, and **2345** is the port  refer **env** above
-  
-* If you want to change the number of workers for parallel training, you can change the value of "world_size" in "execute_cpu. sh", which represents the number of workers
+    * 1.enter the "./ring-reduce" directory, the directory where "train.py" is located   
+    * 2.Check the port to ensure that it is not used and occupied. For example, you choose port 23456, run ***"netstat anp | grep 23456"*** on the command line.
+    * 3.To avoid communication problems, you can try to temporarily close the firewall
+    * 4.enter "nohup python3 -u train.py --init-method tcp://[your_master-server_ip] --rank [the_rank] --world-size [world_size] --gloo_socket_ifname[current-server_gloo-socket-ifname]" on the command line. For example, their are two servers:
+     
+     * **In server1(master):**
+     
+     ***conda activate fl38***
+     
+     ***cd /home/maxvyang01/ring-reduce***
+     
+     ***nohup python3 -u train.py --init-method tcp://192.168.0.1:23456 --rank 0 --world-size 2  --gloo_socket_ifname eth0***
+     
+    * **In server2:**
+     
+     ***conda activate fl38***
+     
+     ***cd /home/maxvyang02/ring-reduce***
+     
+     ***nohup python3 -u train.py --init-method tcp://192.168.0.1:23456 --rank 1 --world-size 2  --gloo_socket_ifname enps1***
+     
+     
+    * explain
+    
+     **--world_size 2** means two servers(world_size) 
+    
+     **192.168.0.1** is the ip address of the server1 in **/ect/hosts**.
+     
+     **--gloo_socket_ifname enps1** find by **ifconfig**
   
 * When the training reaches about 90 epochs, the accuracy of the test_set will reach more than 90%
 
