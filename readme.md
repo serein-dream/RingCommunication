@@ -42,15 +42,16 @@ Just download this folder in all servers directly.
     * 1.enter the "./ring-reduce" directory, the directory where "train.py" is located   
     * 2.Check the port to ensure that it is not used and occupied. For example, you choose port 23456, run ***"netstat anp | grep 23456"*** on the command line.
     * 3.To avoid communication problems, you can try to temporarily close the firewall
-    * 4.enter "nohup python3 -u train.py --init-method tcp://[your_master-server_ip] --rank [the_rank] --world-size [world_size] --gloo_socket_ifname[current-server_gloo-socket-ifname]" on the command line. For example, their are two servers:
+    * 4.Choose use the trained model--"model_state_dict.pth" or not. If you use it, you just need to add "-- model_path  [the path of model_state_dict.pth]" at the end of the nohup directive
+    * 5.enter "nohup python3 -u train.py --init-method tcp://[your_master-server_ip] --rank [the_rank] --world-size [world_size] --gloo_socket_ifname[current-server_gloo-socket-ifname]" on the command line. For example, their are two servers:
      
      * **In server1(master):**
      
      ***conda activate fl38***
      
-     ***cd /home/maxvyang01/ring-reduce***
+     ***cd /home/mxy01/ring-reduce***  (the code path)
      
-     ***nohup python3 -u train.py --init-method tcp://192.168.0.1:23456 --rank 0 --world-size 2  --gloo_socket_ifname eth0***
+     ***nohup python3 -u train.py --init-method tcp://192.168.0.1:23456 --rank 0 --world-size 2  --gloo_socket_ifname eth0  （--model_path "/home/mxy01/fl/ring-reduce/model_state_dict.pth"）***
      
     * **In server2:**
      
@@ -58,7 +59,7 @@ Just download this folder in all servers directly.
      
      ***cd /home/maxvyang02/ring-reduce***
      
-     ***nohup python3 -u train.py --init-method tcp://192.168.0.1:23456 --rank 1 --world-size 2  --gloo_socket_ifname enps1***
+     ***nohup python3 -u train.py --init-method tcp://192.168.0.1:23456 --rank 1 --world-size 2  --gloo_socket_ifname enps1 （--model_path "/home/mxy01/fl/ring-reduce/model_state_dict.pth"***
      
      
     * explain
@@ -77,6 +78,7 @@ Just download this folder in all servers directly.
 * "run.py"    in the "utils" folder is used to train and test the model, and the communication code is written in the "train_model()" function.
 * "data" folder stores the dataset
 * "Usage.py"   is not used temporarily
+* "model_state_dict.pth" is the model parameter after training with lr=0.9 0.95 0.97, epoch=1500
  
 ## Communication ideas
 We need two ring communications：
