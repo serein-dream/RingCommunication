@@ -78,7 +78,7 @@ Just download this folder in all servers directly.
 * "run.py"    in the "utils" folder is used to train and test the model, and the communication code is written in the "train_model()" function.
 * "data" folder stores the dataset
 * "Usage.py"   is not used temporarily
-* "model_state_dict.pth" is the model parameter after training with lr=0.9 0.95 0.97, epoch=1500
+* "model_state_dict.pth" is the model parameter after training with lr=0.9 0.93 0.97, epoch=1500
  
 ## Communication ideas
 We need two ring communications：
