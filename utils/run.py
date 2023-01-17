@@ -124,8 +124,8 @@ def run(model, training_loader, test_loader, sampler, optimizer, criterion,
             test_acc = test_model(model, rank, test_loader, criterion, epoch, epochs, log, device)
             best_test_acc = max(best_test_acc, test_acc)
         '''
-        if epoch>=300 and epoch%50==0:
-            log.save_model_e(model,epoch)
+        #if epoch>=300 and epoch%50==0:
+        #    log.save_model_e(model,epoch)
 
     log.logger.warning(f"Best train accuracy: {best_train_acc}")
     if rank == 0:
