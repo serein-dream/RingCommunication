@@ -17,12 +17,12 @@ There are detailed comments to explain my ideas.
 Just download this folder in all servers directly.
  
 ## Env
-* You should have installed **anconda** in all servers.
-    * **I have pack conda env for you.** 
+* You should install **Anaconda** in all servers if you haven't it.
+* You should schdule Configure conda environment in all servers.**I have pack conda env for you.** 
     
-      In all your servers, you can download the **"environment.yaml"**  and run ***"conda env create -f environment.yaml"***, then you will get the env "fl38".
+    * In all your servers, you can download the **"environment.yaml"**  and run ***"conda env create -f environment.yaml"***, then you will get the env "fl38" which contains all the required packages.
       
-      you can activate this env by ***"conda activate fl38"***
+    * you can activate this env by ***"conda activate fl38"***
       
 * You need to have several servers that can communicate with each other, and corresponding aliases in their hosts. 
     * For example, they should contain each other in their ***/etc/hosts*** :
@@ -40,26 +40,27 @@ Just download this folder in all servers directly.
  
 * When you complete the above environment configuration, you need to do is：
     * 1.enter the "./ring-reduce" directory, the directory where "train.py" is located   
-    * 2.Check the port to ensure that it is not used and occupied. For example, you choose port 23456, run ***"netstat anp | grep 23456"*** on the command line.
-    * 3.To avoid communication problems, you can try to temporarily close the firewall
+    * 2.Check the port to ensure that it is not used or occupied. For example, you choose port 23456, run ***"netstat anp | grep 23456"*** on the command line to check.
+    * 3.To avoid communication problems, you can try to temporarily close the firewall.
     * 4.Choose use the trained model--"model_state_dict.pth" or not. If you use it, you just need to add "-- model_path  [the path of model_state_dict.pth]" at the end of the nohup directive
-    * 5.enter "nohup python3 -u train.py --init-method tcp://[your_master-server_ip] --rank [the_rank] --world-size [world_size] --gloo_socket_ifname[current-server_gloo-socket-ifname]" on the command line. For example, their are two servers:
+    * 5.**Train experience**：Accuracy will be very low before about 300-600 epoches,and will jump to 98%-99.99% at 400-800 epoches. You can set the epoch to 1200, which may be better if you need to train for high accuracy. You can also directly load the trained model **"model_state_dict.pth"** or half-trained model **"model_state_dict_300.pth"**
+    * 6.enter "nohup python3 -u train.py --init-method tcp://[your_master-server_ip] --rank [the_rank] --world-size [world_size] --gloo_socket_ifname[current-server_gloo-socket-ifname]" on the command line. For example, their are two servers:
      
      * **In server1(master):**
      
-     ***conda activate fl38***
+     \>\> ***conda activate fl38***
      
-     ***cd /home/mxy01/ring-reduce***  (the code path)
+     \>\> ***cd /home/mxy01/ring-reduce***  (the code path)
      
-     ***nohup python3 -u train.py --init-method tcp://192.168.0.1:23456 --rank 0 --world-size 2  --gloo_socket_ifname eth0  （--model_path "/home/mxy01/fl/ring-reduce/model_state_dict.pth"）***
+     \>\> ***nohup python3 -u train.py --init-method tcp://192.168.0.1:23456 --epoch 1200 --rank 0 --world-size 2  --gloo_socket_ifname eth0  （--model_path "/home/mxy01/fl/ring-reduce/model_state_dict.pth"）***
      
     * **In server2:**
      
-     ***conda activate fl38***
+     \>\> ***conda activate fl38***
      
-     ***cd /home/maxvyang02/ring-reduce***
+     \>\> ***cd /home/maxvyang02/ring-reduce***
      
-     ***nohup python3 -u train.py --init-method tcp://192.168.0.1:23456 --rank 1 --world-size 2  --gloo_socket_ifname enps1 （--model_path "/home/mxy01/fl/ring-reduce/model_state_dict.pth"***
+     \>\> ***nohup python3 -u train.py --init-method tcp://192.168.0.1:23456 --epoch 1200 --rank 1 --world-size 2  --gloo_socket_ifname enps1 （--model_path "/home/mxy01/fl/ring-reduce/model_state_dict.pth"***
      
      
     * explain
