@@ -23,10 +23,10 @@ def get_args():
     parser.add_argument('--model', type=str, default="cnn", help="Choose your model.")
     #parser.add_argument("--method", choices=['multiclass', 'binary', 'regression'], default='multicalss', type=str)
     parser.add_argument('--batch_size', type=int, default=128, help='Training batch size.')
-    parser.add_argument('--lr', type=float, default=0.01, help='Training learning rate.')
+    parser.add_argument('--lr', type=float, default=0.02, help='Training learning rate.')
     parser.add_argument('--lr_gamma', type=float, default=0.9, help='Training learning rate gamma.')
     #parser.add_argument('--lr_step', type=int, default=[40, 80], nargs="+", help='Training learning rate steps.') define in run.py
-    parser.add_argument('--epoch', type=int, default=200, help='Training epochs.')
+    parser.add_argument('--epoch', type=int, default=1200, help='Training epochs.')
     parser.add_argument('--backend', type=str, default="gloo", help='Communication backend.')
     parser.add_argument(
         '-i',
