@@ -101,7 +101,7 @@ The second ring:
 ## Authors
  
 * **Xvyang Ma** - [Homepage](https://github.com/serein-dream)
-* Main Reference: ***Mixed-Compression***  -[Project Page](https://github.com/ZhangQBx/Mixed-Compression/tree/zhangqinbo)  -[**Qingbo Zhang**](https://github.com/ZhangQBx)
+* Main Reference: ***Mixed-Compression***  -[Project Page](https://github.com/ZhangQBx/Mixed-Compression/tree/zhangqinbo)  -[**Qinbo Zhang**](https://github.com/ZhangQBx)
 * 
     .
     .
